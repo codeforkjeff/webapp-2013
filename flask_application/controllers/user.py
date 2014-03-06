@@ -66,6 +66,7 @@ def public_profile(id, page=1):
 		things = things.items,
 		pagination = things,
 		collections = collections,
+		user = user,
 		public=True)
 
 
