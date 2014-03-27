@@ -29,6 +29,7 @@ def profile(page=1):
 		things = things.items,
 		pagination = things,
 		collections = collections,
+		endpoint='user.profile',
 		public=False)
 
 
@@ -66,6 +67,7 @@ def public_profile(id, page=1):
 		things = things.items,
 		pagination = things,
 		collections = collections,
+		endpoint='user.public_profile',
 		user = user,
 		public=True)
 
