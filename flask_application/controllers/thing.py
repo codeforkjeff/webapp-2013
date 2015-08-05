@@ -108,7 +108,7 @@ def detail(id):
 		preview = url_for('reference.preview', filename=preview)
 	preview_url = url_for('reference.figleaf', md5=thing.preview(get_md5=True)) if preview else False
 	# contributors
-	contributors = [ thing.creator ]
+	contributors = []
 	for f in thing.files:
 		if not f.creator in contributors:
 			contributors.append( f.creator )
