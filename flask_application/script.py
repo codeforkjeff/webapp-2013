@@ -44,7 +44,6 @@ class Tweet(Command):
 				print "Unexpected error:", sys.exc_info()[0]
 				print traceback.print_tb(sys.exc_info()[2])
 
-<<<<<<< HEAD
 class GetPath(Command):
         option_list = (
                 Option('--md5', '-m', dest='md5'),
@@ -58,8 +57,6 @@ class GetPath(Command):
 	def run(self, md5):
 		return self.get_path_from_md5(md5)
 
-=======
->>>>>>> ac23aa386a8c217f593ee99d40a8773d7e81e9cd
 class ESIndex(Command):
 	option_list = (
 		Option('--do', '-d', dest='do'),
@@ -211,7 +208,6 @@ class ESIndex(Command):
 			for t in Thing.objects.skip(batch*self.batch_size).limit(self.batch_size):
 				self.index_thing(t)
 				keep_going = True
-<<<<<<< HEAD
 
 	def index_all_makers(self):
 		""" Indexes all makers """
@@ -224,20 +220,6 @@ class ESIndex(Command):
 				self.index_maker(m)
 				keep_going = True
 
-=======
-
-	def index_all_makers(self):
-		""" Indexes all makers """
-		batch = -1
-		keep_going = True
-		while keep_going:
-			keep_going = False
-			batch += 1
-			for m in Maker.objects.skip(batch*self.batch_size).limit(self.batch_size):
-				self.index_maker(m)
-				keep_going = True
-
->>>>>>> ac23aa386a8c217f593ee99d40a8773d7e81e9cd
 	def index_all_collections(self):
 		""" Indexes all collections """
 		batch = -1

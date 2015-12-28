@@ -92,11 +92,8 @@ class ES(object):
 			result = self.elastic.search(**kwargs)
 		except ConnectionTimeout:
 			return []
-<<<<<<< HEAD
 		except:
 			return []
-=======
->>>>>>> ac23aa386a8c217f593ee99d40a8773d7e81e9cd
 		if 'hits' in result and 'hits' in result['hits']:
 			if fields:
 				if highlight:
@@ -165,14 +162,10 @@ class ES(object):
 			kwargs['q'] = query
 		else:
 			kwargs['body'] = self.build_query_body(query=query, filter=filter)
-<<<<<<< HEAD
 		try:
 			r = self.elastic.count(**kwargs)
 		except:
 			return 0
-=======
-		r = self.elastic.count(**kwargs)
->>>>>>> ac23aa386a8c217f593ee99d40a8773d7e81e9cd
 		if 'count' in r:
 			return int(r['count'])
 		else:
@@ -210,8 +203,4 @@ class ES(object):
 		self.elastic.delete(
 			index=self.index_name, 
 			doc_type=obj.type, 
-<<<<<<< HEAD
 			id=str(obj.id))
-=======
-			id=str(obj.id))
->>>>>>> ac23aa386a8c217f593ee99d40a8773d7e81e9cd

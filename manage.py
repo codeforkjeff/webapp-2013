@@ -5,8 +5,8 @@ import sys, os
 root_dir = os.path.normpath(os.path.abspath(os.path.dirname(__file__)))
 os.chdir(root_dir)
 
-activate_this = os.path.join(root_dir, 'venv2', 'bin', 'activate_this.py')
-execfile(activate_this, dict(__file__=activate_this))
+#activate_this = os.path.join(root_dir, 'venv2', 'bin', 'activate_this.py')
+#execfile(activate_this, dict(__file__=activate_this))
 
 sys.path.pop(0)
 sys.path.insert(0, os.getcwd())
@@ -14,11 +14,7 @@ sys.path.insert(0, os.getcwd())
 from flask_application import app
 from flask.ext.script import Manager, Server
 
-<<<<<<< HEAD
 from flask_application.script import Tweet, ESIndex, GetPath, ResetDB, PopulateDB, SolrReindex, FixMD5s, UploadSymlinks, IndexPDFText, ExtractISBN
-=======
-from flask_application.script import Tweet, ESIndex, ResetDB, PopulateDB, SolrReindex, FixMD5s, UploadSymlinks, IndexPDFText, ExtractISBN
->>>>>>> ac23aa386a8c217f593ee99d40a8773d7e81e9cd
 
 from flask.ext.security.script import (CreateUserCommand , AddRoleCommand,
         RemoveRoleCommand, ActivateUserCommand, DeactivateUserCommand)
@@ -32,11 +28,8 @@ manager.add_command("populate_db", PopulateDB())
 manager.add_command("solr_reindex", SolrReindex())
 manager.add_command("es_index", ESIndex())
 
-<<<<<<< HEAD
 manager.add_command("get_path", GetPath())
 
-=======
->>>>>>> ac23aa386a8c217f593ee99d40a8773d7e81e9cd
 manager.add_command("fix_md5s", FixMD5s())
 manager.add_command("upload_symlinks", UploadSymlinks())
 
