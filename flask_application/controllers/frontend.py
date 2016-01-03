@@ -125,7 +125,10 @@ def search(type=False):
 			num=num)
 		content = get_template_attribute('frontend/macros.html', 'search_results')(results, 'maker.detail')
 	elif type=='discussions':
-		results = []
+		results = elastic.search('thread',
+			query={ 'title^3,searchable_text':query },
+			start=start,
+			num=num)
 		content = get_template_attribute('frontend/macros.html', 'search_results')(results, 'talk.thread')
 	elif type=='collections':
 		results = elastic.search('collection', 

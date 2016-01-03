@@ -203,6 +203,8 @@ class ESIndex(Command):
 					id=id, 
 					body={'doc':body})
 
+	def index_discussion(self, thread):
+		thread.add_to_solr()
 
 	def index_all_things(self):
 		""" Indexes all things """
@@ -249,6 +251,16 @@ class ESIndex(Command):
 					self.index_upload(u, True)
 				keep_going = True
 
+	def index_all_discussions(self):
+		""" Indexes all discussions """
+		batch = -1
+		keep_going = True
+		while keep_going:
+			keep_going = False
+			batch += 1
+			for t in Thread.objects.skip(batch*self.batch_size).limit(self.batch_size):
+				self.index_discussion(t)
+				keep_going = True
 
 	def index_updated_uploads(self, only_once=False):
 		""" Indexes all uploads, thing by thing """
@@ -312,6 +324,13 @@ class ESIndex(Command):
 				if t:
 					for u in t.files:
 						self.index_upload(u)
+		if do=='discussion':
+			if id=='all':
+				self.index_all_discussions()
+			else:
+				t = Thread.objects.filter(id=id).first()
+				if t:
+					self.index_discussion(t)
 
 class ResetDB(Command):
   """Drops all tables and recreates them"""

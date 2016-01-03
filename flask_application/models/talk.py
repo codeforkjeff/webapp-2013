@@ -41,7 +41,7 @@ class Thread(SolrMixin, CreatorMixin, FollowersMixin, db.Document):
 	def add_comment(self, text, user=None, created_at=None):
 		comment = Comment(text=text, created_at=created_at)
 		comment.set_creator(user)
-		self.update(add_to_set__comments=comment)
+		self.comments.append(comment)
 		self.last_comment = comment.created_at
 		self.last_comment_by = comment.creator
 		self.last_comment_text = text
@@ -76,9 +76,8 @@ class Thread(SolrMixin, CreatorMixin, FollowersMixin, db.Document):
 
 	def build_solr(self):
 		searchable = ' '.join([c.text for c in self.comments])
-		searchable = "%s %s" % (self.origin_title, searchable)
+		searchable = "%s %s" % (self.origin_title(), searchable)
 		return {
-			'_id' : self.id,
 			'content_type' : 'thread',
 			'title': self.title,
 			'searchable_text': searchable 
