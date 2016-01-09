@@ -3,7 +3,7 @@ import stdnum.isbn
 
 from bson import ObjectId
 
-from flask_application import app
+from flask_application import app, torrent
 
 from werkzeug import secure_filename
 from mongoengine.base import ValidationError
@@ -388,6 +388,9 @@ class Upload(SolrMixin, CreatorMixin, db.Document):
 			'content_type' : 'upload',
 			'searchable_text': content,
 		}
+
+	def get_torrent(self):
+		return torrent.Torrent(app.config, self)
 
 
 class TextUpload(Upload):

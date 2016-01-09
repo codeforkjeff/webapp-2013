@@ -1,0 +1,32 @@
+{% extends "bootstrap/layouts/base_navbar_responsive.html" %}
+
+{% block js_footer %}
+<!-- TODO: use FileSaver: https://github.com/eligrey/FileSaver.js#saving-text -->
+<script src="https://cdn.jsdelivr.net/webtorrent/latest/webtorrent.min.js"></script>
+<script>
+$(document).ready(function() {
+
+    /*var WebTorrent = require('webtorrent') */
+
+    var client = new WebTorrent();
+
+    var torrentId = '{{ upload.get_torrent().get_magnet_link() }}';
+
+    client.add(torrentId, function (torrent) {
+      $("#status").html("Download finished! You should see the file below");
+
+      // Torrents can contain many files. Let's use the first.
+      var file = torrent.files[0];
+
+      // Display the file by adding it to the DOM. Supports video, audio, image, etc. files
+      file.appendTo('body');
+
+      alert("Done!");
+    })
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<p id="status">Downloading {{ upload.structured_file_name }}, please wait, this could take a few mins. The file should appear in this window when it's done.</p>
+{% endblock %}

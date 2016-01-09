@@ -3,7 +3,7 @@ import os
 from flask import Blueprint, render_template, flash, request, redirect, url_for, abort, jsonify, send_file
 from flask.ext.security import (login_required, roles_required, roles_accepted)
 
-from flask_application import app, tweeter, do_tweets
+from flask_application import app, tweeter, do_tweets, torrent
 from flask_application.models import *
 
 #from ..permissions.thing import can_edit_thing
@@ -28,6 +28,10 @@ def handle_upload(thing_id=None):
 			u = um.set_uploaded_file(file, short_description=request.form.get("short_description")[:255])
 			if thing:
 				thing.add_file(u)
+			try:
+				u.get_torrent().create()
+			except Exception, e:
+				print "Error creating torrent files: %s" % (e,)
 			uploaded_files.append({
 				'url': url_for('upload.serve_upload', filename=u.structured_file_name), 
 				'structured_file_name': u.structured_file_name,
@@ -85,3 +89,11 @@ def recover_broken_file(filename):
 		thing = Thing.objects(files=u).first()
 		result = u.recover_broken_file(thing.get_maker_and_title())
 	return jsonify({'status':result})
+
+@upload.route('/<id>/webtorrent_download')
+def webtorrent_download(id):
+	u = Upload.objects.get(id=id)
+	return render_template(
+		'upload/webtorrent_download.html',
+		upload=u,
+	)

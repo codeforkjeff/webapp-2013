@@ -45,6 +45,10 @@
 	      {% if file.md5 and file.mimetype=="application/pdf" %}
 	       <small><a href="{{url_for('reference.figleaf', md5=file.md5)}}">(preview)</a></small>
 	      {% endif %}
+	      {% if file.get_torrent().exists() %}
+		  <br/><small><a href="{{ file.get_torrent().get_magnet_link() }}">magnet link</a></small>
+		  <br/><small><a href="{{url_for('upload.webtorrent_download', id=file.id)}}">webtorrent D/L</a></small>
+		  {% endif %}
 	      </td>
 	      <td>{{file.short_description}}</td>
 	      <td>{{file.mimetype}}</td>
