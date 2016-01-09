@@ -22,11 +22,35 @@ $(document).ready(function() {
       file.appendTo('body');
 
       alert("Done!");
-    })
+    });
+
+    var checkProgress = function() {
+        console.log("polling...");
+        var progress = 0;
+        if (client.torrents[0]) {
+            progress = client.torrents[0].progress;
+            $("#progress_pct").html(progress * 100);
+
+            var swarm = client.torrents[0].swarm;
+            if (swarm) {
+                $("#peer_count").html(swarm.wires.length);
+            }
+        }
+        if(progress != 1) {
+            setTimeout(checkProgress, 10000);
+        }
+    };
+
+    checkProgress();
 });
 </script>
 {% endblock %}
 
 {% block content %}
-<p id="status">Downloading {{ upload.structured_file_name }}, please wait, this could take a few mins. The file should appear in this window when it's done.</p>
+<div id="status">
+    <p>Downloading {{ upload.structured_file_name }}, please wait, this could take a few mins. The file should appear in this window when it's done.</p>
+    <p>Progress: <span id="progress_pct">0</span>%</p>
+    <p># of peer connections: <span id="peer_count">0</span></p>
+</div>
+
 {% endblock %}
