@@ -48,6 +48,7 @@ $(document).ready(function() {
 
 {% block content %}
 <div id="status">
+    <p>THIS DOESN'T WORK because files aren't being seeded using a WebTorrent peer.</p>
     <p>Downloading {{ upload.structured_file_name }}, please wait, this could take a few mins. The file should appear in this window when it's done.</p>
     <p>Progress: <span id="progress_pct">0</span>%</p>
     <p># of peer connections: <span id="peer_count">0</span></p>
