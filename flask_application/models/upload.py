@@ -9,6 +9,8 @@ from flask_application import app
 from werkzeug import secure_filename
 from mongoengine.base import ValidationError
 
+import ipfsApi
+
 import codecs
 
 from . import db, CreatorMixin, SolrMixin
@@ -397,16 +399,13 @@ class Upload(SolrMixin, CreatorMixin, db.Document):
 		Adds this upload to ipfs. Raises exceptions on failures.
 		"""
 		if os.path.exists(self.full_path()):
-			ipfs_bin = app.config.get("IPFS_BIN") or "ipfs"
-			output = subprocess.check_output([ipfs_bin, "add", self.full_path()],
-											 stderr=subprocess.STDOUT)
-			if "added" in output:
-				line = output.strip()
-				hash_id = line.split()[1]
-				self.ipfs = hash_id
+			api = ipfsApi.Client('127.0.0.1', 5001)
+			response = api.add(self.full_path())
+			if 'Hash' in response:
+				self.ipfs = response['Hash']
 				self.save()
 			else:
-				raise Exception("error calling ipfs add: %s" % (output,))
+				raise Exception("couldn't process response: %s" % (response,))
 		else:
 			raise Exception("ipfs_add couldn't add non-existent file: %s" %(self.full_path(),))
 
@@ -421,7 +420,7 @@ class Upload(SolrMixin, CreatorMixin, db.Document):
 		:return: string of ipfs download link
 		"""
 		host = app.config.get('IPFS_HTTP_GATEWAY_HOST')
-		return "http://%s/ipfs/%s/%s" % (host, self.ipfs, self.structured_file_name)
+		return "http://%s/ipfs/%s" % (host, self.ipfs)
 
 
 class TextUpload(Upload):
